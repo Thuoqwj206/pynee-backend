@@ -1,4 +1,4 @@
 package com.example.pyneebackend.entities;
 
-public enum TourForSaleStatus {cancelled,active
+public enum TourForSaleStatus {CANCELLED,ACTIVE
 }

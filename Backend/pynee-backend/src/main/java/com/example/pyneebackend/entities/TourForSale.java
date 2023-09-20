@@ -7,6 +7,7 @@ import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "tour_for_sale")
@@ -18,15 +19,18 @@ public class TourForSale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tour_for_sale_id")
-    private Long tourForSaleId;
+    private int tourForSaleId;
 
     @ManyToOne
     @JoinColumn(name = "tour_id")
     private Tour tour;
 
-    private BigDecimal price;
+    private double price;
+
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date departureDate;
-    private Integer quantity;
+    private int quantity;
 
     @Enumerated(EnumType.STRING)
     private TourForSaleStatus status;
