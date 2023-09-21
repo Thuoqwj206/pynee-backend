@@ -1,6 +1,8 @@
 package com.example.pyneebackend.services.imp;
+import com.example.pyneebackend.entities.Tour;
 import com.example.pyneebackend.entities.TourForSale;
 import com.example.pyneebackend.entities.TourForSaleStatus;
+import com.example.pyneebackend.entities.TourStatus;
 import com.example.pyneebackend.repositories.TourForSaleRepository;
 import com.example.pyneebackend.services.ITourForSaleService;
 import jakarta.transaction.Transactional;
@@ -45,12 +47,18 @@ public class TourForSaleService implements ITourForSaleService {
 
     @Override
     @Transactional
-    public TourForSale deleteTour(int tourForSaleId) {
-        TourForSale tour = repository.getById(tourForSaleId);
-        if (repository.existsByTourForSaleId(tour) || tour.getStatus().equals(TourForSaleStatus.ACTIVE)) {
-             tour.setStatus(TourForSaleStatus.CANCELLED);
-             return tour;
+    public boolean deleteTour(int tourForSaleId) {
+        Optional<TourForSale> optionalTourForSale = repository.findById(tourForSaleId);
+        if (optionalTourForSale.isPresent()) {
+            TourForSale tourForSale = optionalTourForSale.get();
+            if (tourForSale.getStatus() == TourForSaleStatus.ACTIVE) {
+                tourForSale.setStatus(TourForSaleStatus.CANCELLED);
+                return true;
+            } else if (tourForSale.getStatus() == TourForSaleStatus.CANCELLED) {
+                repository.delete(tourForSale);
+                return true;
+            }
         }
-        return null;
+        return false;
     }
 }

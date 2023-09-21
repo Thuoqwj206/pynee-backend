@@ -47,9 +47,9 @@ public class TourController {
         return new ResponseEntity<>("Updated Successfully",HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteTour(@PathVariable int id){
-        if (service.deleteTour(id) == null) {
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteTour(@RequestParam(name = "id") int id){
+        if (!service.deleteTour(id)) {
             return new ResponseEntity<>("Invalid Tour ID", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>("Deleted Successfully",HttpStatus.OK);

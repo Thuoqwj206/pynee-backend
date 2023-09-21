@@ -1,6 +1,8 @@
 package com.example.pyneebackend.services.imp;
 
 import com.example.pyneebackend.entities.Tour;
+import com.example.pyneebackend.entities.TourForSale;
+import com.example.pyneebackend.entities.TourForSaleStatus;
 import com.example.pyneebackend.entities.TourStatus;
 import com.example.pyneebackend.repositories.TourRepository;
 import com.example.pyneebackend.services.ITourService;
@@ -47,12 +49,18 @@ public class TourService implements ITourService {
 
     @Override
     @Transactional
-    public Tour deleteTour(int tourId) {
-        List<Tour> tourList = findAllTourByStatus(TourStatus.AVAILABLE);
-        if (tourList.contains(repository.getById(tourId))) {
-            repository.getById(tourId).setStatus(TourStatus.UNAVAILABLE);
-           return repository.getById(tourId);
+    public boolean deleteTour(int tourId) {
+        Optional<Tour> optionalTour = repository.findById(tourId);
+        if (optionalTour.isPresent()) {
+            Tour tour = optionalTour.get();
+            if (tour.getStatus() == TourStatus.AVAILABLE) {
+                tour.setStatus(TourStatus.UNAVAILABLE);
+                return true;
+            } else if (tour.getStatus() == TourStatus.UNAVAILABLE) {
+                repository.delete(tour);
+                return true;
+            }
         }
-        return null;
+        return false;
     }
 }

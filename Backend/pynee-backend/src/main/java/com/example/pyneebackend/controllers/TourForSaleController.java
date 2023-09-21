@@ -1,9 +1,9 @@
 package com.example.pyneebackend.controllers;
 
-import com.example.pyneebackend.entities.Tour;
 import com.example.pyneebackend.entities.TourForSale;
 import com.example.pyneebackend.entities.TourForSaleStatus;
 import com.example.pyneebackend.services.imp.TourForSaleService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,9 +48,9 @@ public class TourForSaleController {
         return new ResponseEntity<>("Updated Successfully",HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTourForSale(@PathVariable int id) {
-        if (service.deleteTour(id)==null) {
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteTourForSale(@RequestParam(name = "id") int id) {
+        if (!service.deleteTour(id)) {
             return new ResponseEntity<>("Invalid TourID",HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>("Deleted Successfully",HttpStatus.OK);

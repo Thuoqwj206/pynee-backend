@@ -11,6 +11,6 @@ public interface ITourService {
    List<Tour> findAllTourByStatus(TourStatus status);
     void addTour(Tour tour);
     Tour updateTour(Tour tour);
-    Tour deleteTour(int tourId);
+    boolean deleteTour(int tourId);
 
 }
